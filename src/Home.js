@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import firebase from "./firebase/firebase";
 import "firebase/firestore";
 import "firebase/auth";
-import LoggedOut from './HomePages/LoggedOut';
-import LoggedIn from './HomePages/LoggedIn';
+import LoggedOut from './HomeViews/LoggedOut';
+import LoggedIn from './HomeViews/LoggedIn';
 
 
 class Home extends Component {
@@ -19,7 +19,7 @@ class Home extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    this.auth.onAuthStateChanged(async user => {
+    this.unsub = this.auth.onAuthStateChanged(async user => {
       if (user) {
         this.userInfo = await this.db
           .collection("users")
@@ -38,6 +38,10 @@ class Home extends Component {
         this.setState({ loading: false });
       }
     });
+  }
+
+  componentWillUnmount() {
+    this.unsub();
   }
 
   render() {
