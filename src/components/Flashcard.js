@@ -51,8 +51,31 @@ function Flashcard(props) {
   const [flip, setFlip] = useState(false);
   const [index, setIndex] = useState(0);
 
+  const frontText = set => {
+    if (set.length !== 0) {
+      if (index >= set.length) {
+        setIndex(set.length - 1);
+      }
+      const card = set[index];
+      return card === undefined ? null : card.front;
+    }
+    return null;
+  };
+
+  const backText = set => {
+    if (set.length !== 0) {
+      if (index >= set.length) {
+        setIndex(set.length - 1);
+      }
+      const card = set[index];
+      return card === undefined ? null : card.back;
+    }
+    return null;
+  };
+
   return (
     <Card
+      style={props.cardStyles}
       className={`${classes.root} ${flip ? "show-answer" : ""}`}
       elevation={3}
     >
@@ -60,21 +83,37 @@ function Flashcard(props) {
         <CachedIcon />
       </IconButton>
       <CardContent className={classes.text} onClick={e => setFlip(!flip)}>
-        <Typography id="index" className={classes.index}>{props.set.length === 0 ? 0 : index + 1}/{props.set.length}</Typography>
+        <Typography id="index" className={classes.index} style={props.indexStyles}>
+          {props.set.length === 0 ? 0 : index + 1}/{props.set.length}
+        </Typography>
         <CardContent className="inner">
           <Typography className="front" variant="body1">
-            {props.set.length !== 0 ? props.set[index].front : null}
+            {frontText(props.set)}
           </Typography>
           <Typography className="back" variant="body1">
-          {props.set.length !== 0 ? props.set[index].back : null}
+            {backText(props.set)}
           </Typography>
         </CardContent>
       </CardContent>
-      <CardActions className={classes.arrows}>
-        <Button onClick={e => index > 0 ? setIndex(index - 1) : null}>
+      <CardActions className={classes.arrows} style={props.arrowStyles}>
+        <Button
+          onClick={e => {
+            if (index > 0) {
+              setFlip(false);
+              setTimeout(() => setIndex(index - 1), 100);
+            }
+          }}
+        >
           <ArrowLeftIcon />
         </Button>
-        <Button onClick={e => index < props.set.length - 1 ? setIndex(index + 1) : null}>
+        <Button
+          onClick={e => {
+            if (index < props.set.length - 1) {
+              setFlip(false);
+              setTimeout(() => setIndex(index + 1), 100);
+            }
+          }}
+        >
           <ArrowRightIcon />
         </Button>
       </CardActions>

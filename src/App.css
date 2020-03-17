@@ -70,8 +70,27 @@ body {
   margin-top: 10vh;
 }
 
+.multi-card-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(150px, 1fr));
+  grid-gap: 16px 8px;
+  justify-items: center;
+  width: 75vw;
+}
+
+.single-card-view, .multi-card-view {
+  margin-top: 5vh;
+}
+
 @media screen and (max-width: 500px) {
   .MuiCard-root {
-    width: 99vw;
+    width: 100vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .multi-card-view {
+    width: 100vw;
   }
 }

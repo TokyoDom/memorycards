@@ -34,7 +34,7 @@ class LoggedOut extends Component {
             <CreateIcon />
             Create Set
           </Button>
-          <Button component={Link} to="/login" variant="contained">
+          <Button component={Link} to="/login" variant="contained" color="secondary">
             Login
           </Button>
         </ButtonGroup>

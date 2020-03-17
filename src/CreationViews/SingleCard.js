@@ -26,15 +26,11 @@ function SingleCard (props) {
   const classes = useStyles();
   const [addModal, addModalOpen] = useState(false);
   const [editModal, editModalOpen] = useState(false);
-  const [delSetModal, delSetModalOpen] = useState(false);
+  //const [delSetModal, delSetModalOpen] = useState(false);
 
     return (
       <section className="single-card-view">
-        <Flashcard 
-          set={props.set}
-          text={props.active}
-          index={props.index}
-        />
+        <Flashcard set={props.set}/>
         <div>
         <ButtonGroup className={classes.btnGroup}>
           <Button onClick={e => addModalOpen(true)}>
@@ -48,7 +44,7 @@ function SingleCard (props) {
           }}>
             <CreateIcon /> Edit Card
           </Button>
-          <Button>
+          <Button onClick={e => props.delCard()}>
             <DeleteIcon /> Delete Card
           </Button>
         </ButtonGroup>
@@ -56,13 +52,14 @@ function SingleCard (props) {
         <div>
         <ButtonGroup className={classes.btnGroup}>
           <Button variant="contained" color="primary">
-            <SaveAltIcon /> Save Changes
+            <SaveAltIcon /> Save Set
           </Button>
-          <Button variant="contained">
+          <Button variant="contained" color="secondary">
             <DeleteForeverIcon /> Delete Set
           </Button>
         </ButtonGroup>
         </div>
+        {/* Add Modal */}
         <Dialog open={addModal} onClose={e => addModalOpen(false)}>
           <DialogTitle>New Card</DialogTitle>
           <DialogContent>
@@ -97,6 +94,7 @@ function SingleCard (props) {
             </DialogActions>
           </DialogContent>
         </Dialog>
+        {/* Edit Modal */}
         <Dialog open={editModal} onClose={e => editModalOpen(false)}>
           <DialogTitle>Edit Card</DialogTitle>
           <DialogContent>
