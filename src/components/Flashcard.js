@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     top: 0,
     left: 0,
     zIndex: 3,
-    padding: 12
+    padding: "2px 4px"
   },
   flip: {
     position: "absolute",
@@ -79,11 +79,19 @@ function Flashcard(props) {
       className={`${classes.root} ${flip ? "show-answer" : ""}`}
       elevation={3}
     >
-      <IconButton className={classes.flip} onClick={e => setFlip(!flip)}>
+      <IconButton
+        size="small"
+        className={classes.flip}
+        onClick={e => setFlip(!flip)}
+      >
         <CachedIcon />
       </IconButton>
       <CardContent className={classes.text} onClick={e => setFlip(!flip)}>
-        <Typography id="index" className={classes.index} style={props.indexStyles}>
+        <Typography
+          id="index"
+          className={classes.index}
+          style={props.indexStyles}
+        >
           {props.set.length === 0 ? 0 : index + 1}/{props.set.length}
         </Typography>
         <CardContent className="inner">

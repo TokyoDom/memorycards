@@ -70,7 +70,7 @@ body {
   margin-top: 10vh;
 }
 
-.multi-card-view {
+.multi-card-dnd {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   grid-template-rows: repeat(auto-fit, minmax(150px, 1fr));
@@ -79,7 +79,7 @@ body {
   width: 75vw;
 }
 
-.single-card-view, .multi-card-view {
+.single-card-view, .multi-card-view, .multi-card-dnd {
   margin-top: 5vh;
 }
 
@@ -90,7 +90,7 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  .multi-card-view {
+  .multi-card-dnd {
     width: 100vw;
   }
 }

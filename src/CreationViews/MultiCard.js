@@ -1,20 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { useDrop } from 'react-dnd';
+import { makeStyles } from "@material-ui/core/styles";
+import { useDrop } from "react-dnd";
 import update from "immutability-helper";
-import Minicard from '../components/Minicard';
+import Minicard from "../components/Minicard";
+import Modal from "../components/Modal";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import AddIcon from "@material-ui/icons/Add";
+import SaveAltIcon from "@material-ui/icons/SaveAlt";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
-function MultiCard({ set, updateSet }) {
-  const setIDs = set.map((card, i) => {return {...card, id: i}});
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: "relative"
+  },
+  edit: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    zIndex: 3
+  },
+  delete: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    zIndex: 3
+  },
+  btnGroup: {
+    display: "flex",
+    justifyContent: "center",
+    margin: "6px 0"
+  }
+}));
 
-  const [cards, setCards] = useState(setIDs);
+function MultiCard({ set, updateSet, changeModCard, setText, modCard }) {
+  const classes = useStyles();
 
+  const [cards, setCards] = useState(set);
+
+  //Modals
+  const [addModal, addModalOpen] = useState(false);
+  const [editModal, editModalOpen] = useState(false);
+
+  //componentdidupdate, updates parent set with child cards
   useEffect(() => {
-    const newSet = cards.map(card => {
-      const { front, back } = card;
-      return { front, back };
-    });
-    updateSet(newSet);
-    console.log(cards);
+    updateSet(cards);
   }, [cards, updateSet]);
 
   //updates state when card moves
@@ -30,8 +60,8 @@ function MultiCard({ set, updateSet }) {
     );
   };
 
+  //called for everycard onLoad and on an action, used to get order
   const findCard = id => {
-    //called for everycard onLoad and on an action, used to get order
     const card = cards.filter(card => `${card.id}` === id)[0];
     return {
       card,
@@ -39,19 +69,86 @@ function MultiCard({ set, updateSet }) {
     };
   };
 
-  const [, drop] = useDrop({ accept: 'card' });
+  //accept drop of type card
+  const [, drop] = useDrop({ accept: "card" });
+
+  //for add button
+  const handleAdd = () => {
+    changeModCard({ front: "", back: "", id: cards.length + 1 });
+    addModalOpen(true);
+  };
+
+  //for modal add button
+  const saveAdd = card => {
+    setCards([...cards, card]);
+  };
+
+  //for edit button
+  const handleEdit = card => {
+    const index = cards.indexOf(card);
+    changeModCard(cards[index]);
+    editModalOpen(true);
+  };
+
+  //for modal edit button
+  const saveEdit = card => {
+    let newSet = [...cards];
+    newSet[card.id] = card;
+    setCards(newSet);
+  };
+
+  //for del card button
+  const handleDelCard = card => {
+    let newSet = [...cards];
+    newSet.splice(newSet.indexOf(card), 1);
+    setCards(newSet);
+  };
 
   return (
-    <section className="multi-card-view" ref={drop}>
+    <section className="multi-card-view">
+      <div>
+        <ButtonGroup className={classes.btnGroup}>
+          <Button variant="contained" onClick={e => handleAdd()}>
+            <AddIcon /> New Card
+          </Button>
+          <Button variant="contained" color="primary">
+            <SaveAltIcon /> Save Set
+          </Button>
+          <Button variant="contained" color="secondary">
+            <DeleteForeverIcon /> Delete Set
+          </Button>
+        </ButtonGroup>
+      </div>
+      <div className="multi-card-dnd" ref={drop}>
         {cards.map(card => (
-          <Minicard 
-            key={card.id}
-            id={`${card.id}`}
-            card={card}
-            moveCard={moveCard}
-            findCard={findCard}
-          />
+          <div className={classes.root} key={card.id}>
+            <Minicard
+              id={`${card.id}`}
+              card={card}
+              moveCard={moveCard}
+              findCard={findCard}
+              handleEdit={handleEdit}
+              handleDelCard={handleDelCard}
+            />
+          </div>
         ))}
+      </div>
+      {/* Add Modal */}
+      <Modal
+        isOpen={addModal}
+        modalOpen={addModalOpen}
+        setText={setText}
+        saveChanges={saveAdd}
+        modCard={modCard}
+      />
+      {/* Edit Modal */}
+      <Modal
+        isOpen={editModal}
+        modalOpen={editModalOpen}
+        setText={setText}
+        saveChanges={saveEdit}
+        modCard={modCard}
+      />
     </section>
   );
 }
