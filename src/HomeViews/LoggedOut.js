@@ -10,7 +10,7 @@ class LoggedOut extends Component {
   state = {
     set: [
       {
-        front: "What is Memory Cards?",
+        front: "What is Memory Cards? (Click Me)",
         back: `A place to make simple online flashcards to study with. Click create
         set to start or login if you already have an account!`
       }

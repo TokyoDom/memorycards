@@ -17,7 +17,9 @@ const testSet = [
   { front: "Card 5 Front", back: "Card 5 Back" },
   { front: "Card 6 Front", back: "Card 6 Back" },
   { front: "Card 7 Front", back: "Card 7 Back" },
-  { front: "Card 8 Front", back: "Card 8 Back" }
+  { front: "Card 8 Front", back: "Card 8 Back" },
+  { front: "Card 9 Front", back: "Card 9 Back" },
+  { front: "Card 10 Front", back: "Card 10 Back" }
 ];
 
 class Creation extends Component {
@@ -39,6 +41,7 @@ class Creation extends Component {
   updateSet = set => {
     const newSet = set.map((card, i) => ({ ...card, id: i }));
     this.setState({ set: newSet });
+    console.log(newSet);
   };
 
   //for modCard modal text

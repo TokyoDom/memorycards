@@ -42,7 +42,7 @@ function MultiCard({ set, updateSet, changeModCard, setText, modCard }) {
   const [addModal, addModalOpen] = useState(false);
   const [editModal, editModalOpen] = useState(false);
 
-  //componentdidupdate, updates parent set with child cards
+  //componentdidupdate, updates parent set with child cards(cards doesnt change)
   useEffect(() => {
     updateSet(cards);
   }, [cards, updateSet]);
@@ -74,7 +74,23 @@ function MultiCard({ set, updateSet, changeModCard, setText, modCard }) {
 
   //for add button
   const handleAdd = () => {
-    changeModCard({ front: "", back: "", id: cards.length + 1 });
+    let id = null;
+    //get unique id
+    if (cards.length !== 0) {
+      let num = 0;
+      while (!id) {
+        // eslint-disable-next-line no-loop-func
+        const result = cards.filter(card => card.id === num);
+        if (result.length === 0) {
+          id = num;
+        } else {
+          num++;
+        }
+      }
+    } else {
+      id = 0;
+    }
+    changeModCard({ front: "", back: "", id });
     addModalOpen(true);
   };
 
@@ -93,7 +109,8 @@ function MultiCard({ set, updateSet, changeModCard, setText, modCard }) {
   //for modal edit button
   const saveEdit = card => {
     let newSet = [...cards];
-    newSet[card.id] = card;
+    const oldCard = newSet.filter(el => el.id === card.id)[0];
+    newSet[newSet.indexOf(oldCard)] = card;
     setCards(newSet);
   };
 
