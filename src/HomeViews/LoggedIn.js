@@ -11,7 +11,7 @@ function LoggedIn({ userInfo }) {
 
   return (
     <div style={{marginTop: '10vh'}}>
-      Welcome User.
+      Welcome {userInfo.name}
       <Button onClick={e => signOut()}>Sign Out</Button>
     </div>
   );

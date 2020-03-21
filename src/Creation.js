@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Navbar from "./components/Navbar";
 import firebase from "./firebase/firebase";
 import "firebase/auth";
 import "firebase/firestore";
@@ -19,6 +18,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import TextField from "@material-ui/core/TextField";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 // const testSet = [
 //   { front: "Card 1 Front", back: "Card 1 Back" },
@@ -38,7 +38,7 @@ class Creation extends Component {
     super(props);
     this.state = {
       loading: false,
-      userInfo: "",
+      userInfo: props.userInfo,
       cardSets: [],
       setName: "",
       initialSet: [],
@@ -49,40 +49,23 @@ class Creation extends Component {
     };
 
     this.db = firebase.firestore();
-    this.auth = firebase.auth();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     //get data from firestore
     this.setState({ loading: true });
-    this.unsub = this.auth.onAuthStateChanged(async user => {
-      if (user) {
-        const userInfo = await this.db
-          .collection("users")
-          .doc(user.uid)
-          .get();
-        const cardSets = await this.db
-          .collection("stacks")
-          .where("uid", "==", user.uid)
-          .get();
-        this.setState({
-          loggedIn: true,
-          userInfo: userInfo.data(),
-          cardSets: cardSets.docs.map(doc => doc.data()),
-          verified: user.emailVerified,
-          loading: false
-        });
-      } else {
-        this.setState({
-          loggedIn: false,
-          loading: false
-        });
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsub();
+    if (this.props.loggedIn) {
+      const cardSets = await this.db
+        .collection("stacks")
+        .where("uid", "==", this.state.userInfo.uid)
+        .get();
+      this.setState({
+        cardSets: cardSets.docs.map(doc => doc.data()),
+        loading: false
+      });
+    } else {
+      this.setState({ loading: false });
+    }
   }
 
   changeModCard = card => {
@@ -182,6 +165,7 @@ class Creation extends Component {
     set = set.map(card => ({ front: card.front, back: card.back }));
     let notSame = false;
     const initSet = this.state.initialSet;
+    //check is changes were made to set
     if (initSet.length !== set.length) {
       notSame = true;
     } else {
@@ -191,6 +175,7 @@ class Creation extends Component {
         }
       });
     }
+    //save to database then update state if editing set/ open modal if adding set
     if (notSame) {
       if (this.state.setName !== "") {
         try {
@@ -202,7 +187,15 @@ class Creation extends Component {
           const fbSetName = setQuery.docs[0].id;
           const dataSet = this.db.collection("stacks").doc(fbSetName);
           await dataSet.update({ set });
-          this.setState({ initialSet: set });
+          this.setState({
+            initialSet: set,
+            cardSets: this.state.cardSets.map(el => {
+              if (el.name === this.state.setName) {
+                el.set = set;
+              }
+              return el;
+            })
+          });
           console.log("set saved");
         } catch (err) {
           console.log(err);
@@ -241,14 +234,39 @@ class Creation extends Component {
     }
   };
 
+  renderView = () => {
+    if (this.state.singView) {
+      return (
+        <SingleCard
+          set={this.state.set}
+          setName={this.state.setName}
+          modCard={this.state.modCard}
+          updateSet={this.updateSet}
+          saveSet={this.saveSet}
+          delSet={this.delSet}
+          changeModCard={this.changeModCard}
+          setText={this.setText}
+        />
+      );
+    } else {
+      return (
+        <MultiCard
+          set={this.state.set}
+          modCard={this.state.modCard}
+          updateSet={this.updateSet}
+          saveSet={this.saveSet}
+          delSet={this.delSet}
+          changeModCard={this.changeModCard}
+          setText={this.setText}
+        />
+      );
+    }
+  };
+
   render() {
     return (
       <DndProvider backend={Backend} options={HTML5toTouch}>
-        {this.state.loggedIn ? <Navbar userInfo={this.state.userInfo} /> : null}
-        <section
-          className="creation-page"
-          style={{ display: this.state.loading ? "none" : null }}
-        >
+        {!this.state.loading ? <section className="creation-page">
           <div className="creation-page-settings">
             {this.renderCardSets()}
             <ButtonGroup style={{ margin: 12 }}>
@@ -268,28 +286,7 @@ class Creation extends Component {
               </Button>
             </ButtonGroup>
           </div>
-          {this.state.singView ? (
-            <SingleCard
-              set={this.state.set}
-              setName={this.state.setName}
-              modCard={this.state.modCard}
-              updateSet={this.updateSet}
-              saveSet={this.saveSet}
-              delSet={this.delSet}
-              changeModCard={this.changeModCard}
-              setText={this.setText}
-            />
-          ) : (
-            <MultiCard
-              set={this.state.set}
-              modCard={this.state.modCard}
-              updateSet={this.updateSet}
-              saveSet={this.saveSet}
-              delSet={this.delSet}
-              changeModCard={this.changeModCard}
-              setText={this.setText}
-            />
-          )}
+          {this.renderView()}
           <Dialog
             open={this.state.saveModal}
             onClose={() => this.setState({ saveModal: false, setName: "" })}
@@ -329,7 +326,7 @@ class Creation extends Component {
               </DialogActions>
             </DialogContent>
           </Dialog>
-        </section>
+        </section> : <CircularProgress className="spinner"/>}
       </DndProvider>
     );
   }

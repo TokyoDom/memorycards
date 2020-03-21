@@ -9,6 +9,18 @@ body {
   background-color: #dad8d8;
 }
 
+.App {
+  position: relative;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: 49vh;
+  margin-left: -20px;
+}
+
 .home-logged-out {
   display: flex;
   flex-direction: column;

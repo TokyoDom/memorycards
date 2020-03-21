@@ -6,7 +6,8 @@ import CardActions from "@material-ui/core/CardActions";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import CachedIcon from "@material-ui/icons/Cached";
+import FlipToFrontIcon from '@material-ui/icons/FlipToFront';
+import FlipToBackIcon from '@material-ui/icons/FlipToBack';
 import ArrowLeftIcon from "@material-ui/icons/ArrowLeft";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 
@@ -96,7 +97,7 @@ function Flashcard(props) {
         className={classes.flip}
         onClick={e => setFlip(!flip)}
       >
-        <CachedIcon />
+        {flip ? <FlipToBackIcon /> : <FlipToFrontIcon />}
       </IconButton>
       <CardContent className={classes.text} onClick={e => setFlip(!flip)}>
         <Typography

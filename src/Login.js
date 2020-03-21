@@ -10,28 +10,16 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 class Login extends Component {
-  state = {
-    loading: false,
-    email: null,
-    pass: null,
-    error: null,
-    loggedIn: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+      email: null,
+      pass: null,
+      error: null,
+      loggedIn: props.loggedIn
+    };
   };
-
-  componentDidMount() {
-    this.setState({ loading: true });
-    this.unsub = firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ loggedIn: true, loading: false });
-      } else {
-        this.setState({ loggedIn: false, loading: false });
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsub();
-  }
 
   handleEmail = value => {
     this.setState({ email: value });
@@ -53,13 +41,17 @@ class Login extends Component {
   };
 
   renderRedirect = () => {
+    if(this.props.loggedIn) {
     return <Redirect to="/" />;
+    } else {
+      return null;
+    }
   };
 
   render() {
     return (
       <section className="login-page">
-        {this.state.loggedIn ? this.renderRedirect() : null}
+        {this.renderRedirect()}
         {this.state.loading ? null : (
           <Card>
             <form>
