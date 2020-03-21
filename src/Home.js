@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import firebase from "./firebase/firebase";
 import "firebase/firestore";
 import "firebase/auth";
-import LoggedOut from './HomeViews/LoggedOut';
-import LoggedIn from './HomeViews/LoggedIn';
-
+import LoggedOut from "./HomeViews/LoggedOut";
+import LoggedIn from "./HomeViews/LoggedIn";
+import Navbar from "./components/Navbar";
 
 class Home extends Component {
   constructor(props) {
@@ -29,13 +29,16 @@ class Home extends Component {
           .collection("stacks")
           .where("uid", "==", user.uid)
           .get();
-        this.setState({ 
+        this.setState({
           loggedIn: true,
           verified: user.emailVerified,
-          loading: false 
+          loading: false
         });
       } else {
-        this.setState({ loading: false });
+        this.setState({
+          loggedIn: false,
+          loading: false
+        });
       }
     });
   }
@@ -48,7 +51,13 @@ class Home extends Component {
     return (
       <div>
         {this.state.loading ? null : this.state.loggedIn ? (
-          <LoggedIn userInfo={this.userInfo} cardSets={this.cardSets}/>
+          <div>
+            <Navbar userInfo={this.userInfo.data()} />
+            <LoggedIn
+              userInfo={this.userInfo.data()}
+              cardSets={this.cardSets.docs.map(doc => doc.data())}
+            />
+          </div>
         ) : (
           <LoggedOut />
         )}

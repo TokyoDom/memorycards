@@ -33,7 +33,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function MultiCard({ set, updateSet, changeModCard, setText, modCard }) {
+function MultiCard({
+  set,
+  updateSet,
+  saveSet,
+  delSet,
+  changeModCard,
+  setText,
+  modCard
+}) {
   const classes = useStyles();
 
   const [cards, setCards] = useState(set);
@@ -128,10 +136,10 @@ function MultiCard({ set, updateSet, changeModCard, setText, modCard }) {
           <Button variant="contained" onClick={e => handleAdd()}>
             <AddIcon /> New Card
           </Button>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={e => saveSet(cards)}>
             <SaveAltIcon /> Save Set
           </Button>
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" onClick={e => delSet()}>
             <DeleteForeverIcon /> Delete Set
           </Button>
         </ButtonGroup>

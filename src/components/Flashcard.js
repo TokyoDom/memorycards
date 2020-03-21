@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -48,8 +48,20 @@ const useStyles = makeStyles(theme => ({
 //Set is only prop from state, card handles index
 function Flashcard(props) {
   let classes = useStyles();
+  const [flashCards, setFlashCards] = useState(props.set);
+  const [setName, changeSetName] = useState(props.setName);
   const [flip, setFlip] = useState(false);
   const [index, setIndex] = useState(0);
+
+  //go to beginning when set is changed
+  useEffect(() => {
+    if (props.setName !== setName) {
+      changeSetName(props.setName);
+      setFlip(false);
+      setIndex(0);
+    }
+    setFlashCards(props.set);
+  }, [setName, props.setName, flashCards, props.set]);
 
   const frontText = set => {
     if (set.length !== 0) {
@@ -92,14 +104,14 @@ function Flashcard(props) {
           className={classes.index}
           style={props.indexStyles}
         >
-          {props.set.length === 0 ? 0 : index + 1}/{props.set.length}
+          {flashCards.length === 0 ? 0 : index + 1}/{flashCards.length}
         </Typography>
         <CardContent className="inner">
           <Typography className="front" variant="body1">
-            {frontText(props.set)}
+            {frontText(flashCards)}
           </Typography>
           <Typography className="back" variant="body1">
-            {backText(props.set)}
+            {backText(flashCards)}
           </Typography>
         </CardContent>
       </CardContent>
@@ -116,7 +128,7 @@ function Flashcard(props) {
         </Button>
         <Button
           onClick={e => {
-            if (index < props.set.length - 1) {
+            if (index < flashCards.length - 1) {
               setFlip(false);
               setTimeout(() => setIndex(index + 1), 100);
             }

@@ -18,7 +18,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function SingleCard({ set, modCard, changeModCard, updateSet, setText }) {
+function SingleCard({
+  set,
+  setName,
+  modCard,
+  changeModCard,
+  updateSet,
+  saveSet,
+  delSet,
+  setText
+}) {
   const classes = useStyles();
 
   const [addModal, addModalOpen] = useState(false);
@@ -59,25 +68,37 @@ function SingleCard({ set, modCard, changeModCard, updateSet, setText }) {
     <section className="single-card-view">
       <div>
         <ButtonGroup className={classes.btnGroup}>
-          <Button variant="contained" color="primary">
-            <SaveAltIcon /> Save Set
+          <Button
+            startIcon={<SaveAltIcon />}
+            variant="contained"
+            color="primary"
+            onClick={e => saveSet(set)}
+          >
+            Save Set
           </Button>
-          <Button variant="contained" color="secondary">
-            <DeleteForeverIcon /> Delete Set
+          <Button
+            startIcon={<DeleteForeverIcon />}
+            variant="contained"
+            color="secondary"
+            onClick={e => delSet()}
+          >
+            Delete Set
           </Button>
         </ButtonGroup>
       </div>
       <div>
         <ButtonGroup className={classes.btnGroup}>
           <Button
+            startIcon={<AddIcon />}
             onClick={e => {
               changeModCard({ front: "", back: "", id: null });
               addModalOpen(true);
             }}
           >
-            <AddIcon /> New Card
+            New Card
           </Button>
           <Button
+            startIcon={<CreateIcon />}
             onClick={e => {
               if (set.length > 0) {
                 changeModCard(set[getIndex()]);
@@ -85,18 +106,19 @@ function SingleCard({ set, modCard, changeModCard, updateSet, setText }) {
               }
             }}
           >
-            <CreateIcon /> Edit Card
+            Edit Card
           </Button>
           <Button
+            startIcon={<DeleteIcon />}
             onClick={e => {
               delCard(set[getIndex()]);
             }}
           >
-            <DeleteIcon /> Delete Card
+            Delete Card
           </Button>
         </ButtonGroup>
       </div>
-      <Flashcard set={set} />
+      <Flashcard set={set} setName={setName} />
       {/* Add Modal */}
       <Modal
         isOpen={addModal}
