@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useDrop } from "react-dnd";
 import update from "immutability-helper";
 import Minicard from "../components/Minicard";
-import Modal from "../components/Modal";
+import CreationModal from "../components/CreationModal";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
@@ -159,7 +159,7 @@ function MultiCard({
         ))}
       </div>
       {/* Add Modal */}
-      <Modal
+      <CreationModal
         isOpen={addModal}
         modalOpen={addModalOpen}
         setText={setText}
@@ -167,7 +167,7 @@ function MultiCard({
         modCard={modCard}
       />
       {/* Edit Modal */}
-      <Modal
+      <CreationModal
         isOpen={editModal}
         modalOpen={editModalOpen}
         setText={setText}

@@ -7,6 +7,7 @@ import Backend from "react-dnd-multi-backend";
 import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch";
 import SingleCard from "./CreationViews/SingleCard";
 import MultiCard from "./CreationViews/MultiCard";
+import SignUpModal from './components/SignUpModal';
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import BorderAllIcon from "@material-ui/icons/BorderAll";
@@ -45,7 +46,8 @@ class Creation extends Component {
       set: [],
       modCard: { front: "", back: "", id: null },
       singView: true,
-      saveModal: false
+      saveModal: false,
+      signUpModal: false
     };
 
     this.db = firebase.firestore();
@@ -116,12 +118,20 @@ class Creation extends Component {
     }
   };
 
+  //for signUpModal click off
+  signUpModalClose = (close) => {
+    this.setState({
+      signUpModal: close,
+      setName: ''
+    });
+  }
+
   //card set conditional
   renderCardSets = () => {
     if (this.state.cardSets.length > 0) {
       return (
         <FormControl>
-          <InputLabel>Set</InputLabel>
+          <InputLabel>Sets</InputLabel>
           <Select
             native
             value={this.state.setName}
@@ -141,6 +151,7 @@ class Creation extends Component {
 
   //save new set to database (from modal)
   saveNewSet = async set => {
+    if(this.state.userInfo !== "") {
     set = set.map(card => ({ front: card.front, back: card.back }));
     try {
       await this.db.collection("stacks").add({
@@ -154,10 +165,13 @@ class Creation extends Component {
           { name: this.state.setName, set, uid: this.state.userInfo.uid }
         ]
       });
-      console.log("set added");
+      alert("Set successfully added.");
     } catch (err) {
       console.log(err);
     }
+  } else {
+    this.setState({signUpModal: true});
+  }
   };
 
   //save existing set to database
@@ -196,7 +210,7 @@ class Creation extends Component {
               return el;
             })
           });
-          console.log("set saved");
+          alert("Set successfully updated.");
         } catch (err) {
           console.log(err);
         }
@@ -225,9 +239,10 @@ class Creation extends Component {
           set: [],
           setName: "",
           initialSet: [],
-          cardSets: this.state.cardSets.filter(set => set.name !== setName)
+          cardSets: this.state.cardSets.filter(set => set.name !== setName),
+          singView: true
         });
-        console.log("set deleted");
+        alert("Set successfully deleted.");
       } catch (err) {
         console.log(err);
       }
@@ -287,6 +302,14 @@ class Creation extends Component {
             </ButtonGroup>
           </div>
           {this.renderView()}
+          {/* Modals */}
+          <SignUpModal 
+            isOpen={this.state.signUpModal} 
+            closeModal={this.signUpModalClose}
+            loggedIn={this.props.loggedIn}
+            set={this.state.set}
+            setName={this.state.setName}
+          />
           <Dialog
             open={this.state.saveModal}
             onClose={() => this.setState({ saveModal: false, setName: "" })}

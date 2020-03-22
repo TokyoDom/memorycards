@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 
-function Modal(props) {
+function CreationModal(props) {
   return (
     <Dialog open={props.isOpen} onClose={e => props.modalOpen(false)}>
       <DialogContent>
@@ -45,4 +45,4 @@ function Modal(props) {
   );
 }
 
-export default Modal;
+export default CreationModal;

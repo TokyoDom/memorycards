@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Flashcard from "../components/Flashcard";
-import Modal from "../components/Modal";
+import CreationModal from "../components/CreationModal";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
@@ -120,7 +120,7 @@ function SingleCard({
       </div>
       <Flashcard set={set} setName={setName} />
       {/* Add Modal */}
-      <Modal
+      <CreationModal
         isOpen={addModal}
         modalOpen={addModalOpen}
         setText={setText}
@@ -128,7 +128,7 @@ function SingleCard({
         modCard={modCard}
       />
       {/* Edit Modal */}
-      <Modal
+      <CreationModal
         isOpen={editModal}
         modalOpen={editModalOpen}
         setText={setText}
