@@ -7,6 +7,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Home";
 import Creation from "./Creation";
+import Practice from "./Practice";
+import Profile from './Profile';
 import Login from "./Login";
 import Navbar from "./components/Navbar";
 import AppBar from "@material-ui/core/AppBar";
@@ -36,16 +38,24 @@ class App extends Component {
     this.unsub = firebase.auth().onAuthStateChanged(async user => {
       this.setState({ loading: true });
       if (user) {
-        const userInfo = await firebase
-          .firestore()
-          .collection("users")
-          .doc(user.uid)
-          .get();
-        this.setState({
-          loggedIn: true,
-          signedOut: false,
-          userInfo: userInfo.data(),
-          loading: false
+        // const userInfo = await firebase
+        //   .firestore()
+        //   .collection("users")
+        //   .doc(user.uid)
+        //   .get();
+        // this.setState({
+        //   loggedIn: true,
+        //   signedOut: false,
+        //   userInfo: userInfo.data(),
+        //   loading: false
+        // });
+        firebase.firestore().collection("users").doc(user.uid).onSnapshot(doc => {
+          this.setState({
+            loggedIn: true,
+            signedOut: false,
+            userInfo: doc.data(),
+            loading: false
+          });
         });
       } else {
         if(this.state.userInfo !== "") {
@@ -102,6 +112,29 @@ class App extends Component {
                   )}
                 />
                 <Route
+                  path="/practice"
+                  render={props => (
+                    <Practice
+                      {...props}
+                      loggedIn={this.state.loggedIn}
+                      userInfo={this.state.userInfo}
+                      key={window.location.pathname}
+                    />
+                  )}
+                />
+                <Route
+                  path="/profile"
+                  render={props => (
+                    <Profile
+                      {...props}
+                      loggedIn={this.state.loggedIn}
+                      userInfo={this.state.userInfo}
+                      key={window.location.pathname}
+                    />
+                  )}
+                />
+                <Route
+                  exact
                   path="/"
                   render={props => (
                     <Home

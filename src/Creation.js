@@ -261,6 +261,7 @@ class Creation extends Component {
           delSet={this.delSet}
           changeModCard={this.changeModCard}
           setText={this.setText}
+          cardStyles={this.state.userInfo.styles}
         />
       );
     } else {
@@ -273,6 +274,7 @@ class Creation extends Component {
           delSet={this.delSet}
           changeModCard={this.changeModCard}
           setText={this.setText}
+          cardStyles={this.state.userInfo.styles}
         />
       );
     }

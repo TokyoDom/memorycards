@@ -75,7 +75,7 @@ function Navbar({ loggedIn, signedOut, userInfo }) {
               open={Boolean(anchorEl)}
               onClose={e => setAnchorEl(null)}
             >
-              <MenuItem component={Link} to="/profile">
+              <MenuItem component={Link} to="/profile" onClick={e => setAnchorEl(null)}>
                 Profile
               </MenuItem>
               <MenuItem onClick={e => signOut()}>Logout</MenuItem>

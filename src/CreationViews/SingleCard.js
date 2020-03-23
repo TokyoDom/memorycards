@@ -26,7 +26,8 @@ function SingleCard({
   updateSet,
   saveSet,
   delSet,
-  setText
+  setText,
+  cardStyles
 }) {
   const classes = useStyles();
 
@@ -118,7 +119,7 @@ function SingleCard({
           </Button>
         </ButtonGroup>
       </div>
-      <Flashcard set={set} setName={setName} />
+      <Flashcard set={set} setName={setName} cardStyles={cardStyles}/>
       {/* Add Modal */}
       <CreationModal
         isOpen={addModal}

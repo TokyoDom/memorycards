@@ -40,7 +40,8 @@ function MultiCard({
   delSet,
   changeModCard,
   setText,
-  modCard
+  modCard,
+  cardStyles
 }) {
   const classes = useStyles();
 
@@ -154,6 +155,7 @@ function MultiCard({
               findCard={findCard}
               handleEdit={handleEdit}
               handleDelCard={handleDelCard}
+              cardStyles={cardStyles}
             />
           </div>
         ))}

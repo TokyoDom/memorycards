@@ -121,7 +121,7 @@ function Flashcard(props) {
           onClick={e => {
             if (index > 0) {
               setFlip(false);
-              setTimeout(() => setIndex(index - 1), 100);
+              setTimeout(() => setIndex(index - 1), 125);
             }
           }}
         >
@@ -131,7 +131,7 @@ function Flashcard(props) {
           onClick={e => {
             if (index < flashCards.length - 1) {
               setFlip(false);
-              setTimeout(() => setIndex(index + 1), 100);
+              setTimeout(() => setIndex(index + 1), 125);
             }
           }}
         >
