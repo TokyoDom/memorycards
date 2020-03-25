@@ -74,6 +74,7 @@ class Practice extends Component {
               render={props => (
                 <Quiz
                   {...props}
+                  userInfo={this.state.userInfo}
                   cardSets={this.state.cardSets}
                   key={window.location.pathname}
                 />

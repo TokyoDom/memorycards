@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import _ from "lodash";
 import Flashcard from "../components/Flashcard";
 import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
+import Switch from "@material-ui/core/Switch";
 import CheckIcon from "@material-ui/icons/Check";
 
 function Typing({ cardSets, userInfo }) {
@@ -14,6 +16,8 @@ function Typing({ cardSets, userInfo }) {
   const [set, changeSet] = useState([]);
   const [setName, changeSetName] = useState("");
   const [answer, setAnswer] = useState("");
+  const [isShuffled, setShuffle] = useState(true);
+  const [shufSet, changeShufSet] = useState([]);
 
   const checkAnswer = () => {
     if (setName !== "" && answer !== "") {
@@ -23,7 +27,7 @@ function Typing({ cardSets, userInfo }) {
 
       if (rightAnswer === userAnswer) {
         console.log("right answer");
-        document.querySelector('.go-right').click();
+        document.querySelector(".go-right").click();
       } else {
         setCount(ansCount + 1);
         console.log("wrong answer");
@@ -35,17 +39,19 @@ function Typing({ cardSets, userInfo }) {
   const nextQuestion = () => {
     setCount(0);
     setAnswer("");
-  }
+  };
 
   const handleSetSelect = e => {
     const setName = e.target.value;
     if (setName !== "") {
-      let newSet = cardSets.filter(set => set.name === setName)[0].set;
+      const newSet = cardSets.filter(set => set.name === setName)[0].set;
 
-      changeSet(_.shuffle(newSet));
+      changeSet(newSet);
+      changeShufSet(_.shuffle(newSet));
       changeSetName(setName);
     } else {
       changeSet([]);
+      changeShufSet([]);
       changeSetName("");
     }
   };
@@ -69,10 +75,26 @@ function Typing({ cardSets, userInfo }) {
   };
 
   return (
-    <section className="practice-standard">
-      {renderCardSets()}
+    <section className="practice-typing">
+      <div style={{ display: "flex", alignItems: "flex-end" }}>
+        {renderCardSets()}
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isShuffled}
+              onChange={e => {
+                changeShufSet(_.shuffle(set));
+                setShuffle(!isShuffled);
+              }}
+              color="primary"
+            />
+          }
+          label="Shuffle"
+          style={{ margin: 0 }}
+        />
+      </div>
       <Flashcard
-        set={set} //use ternary here for shuffle?
+        set={isShuffled ? shufSet : set}
         setName={setName}
         cardStyles={{
           ...userInfo.styles,
@@ -92,7 +114,9 @@ function Typing({ cardSets, userInfo }) {
           size="small"
           value={answer}
           onChange={e => setAnswer(e.target.value)}
-          onKeyDown={e => {if(e.keyCode === 13) checkAnswer()}}
+          onKeyDown={e => {
+            if (e.keyCode === 13) checkAnswer();
+          }}
         />
         <IconButton
           color="primary"

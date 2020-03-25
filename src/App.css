@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
 
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: #dad8d8;
 }
 
@@ -46,7 +46,8 @@ body {
   transform: rotateX(180deg);
 }
 
-.front, .back {
+.front,
+.back {
   backface-visibility: hidden;
   position: absolute;
   top: 0;
@@ -75,14 +76,20 @@ body {
   height: 75vh;
 }
 
-.creation-page, .practice-page, .practice-standard {
+.creation-page,
+.practice-page,
+.practice-standard,
+.practice-typing,
+.practice-quiz {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 10vh;
 }
 
-.practice-standard > * {
+.practice-standard > *,
+.practice-typing > *,
+.practice-quiz > * {
   margin: 4px;
 }
 
@@ -95,7 +102,9 @@ body {
   width: 75vw;
 }
 
-.single-card-view, .multi-card-view, .multi-card-dnd {
+.single-card-view,
+.multi-card-view,
+.multi-card-dnd {
   margin-top: 5vh;
 }
 
@@ -110,7 +119,9 @@ body {
     width: 100vw;
   }
 
-  .creation-page, .practice-page, .practice-standard {
+  .creation-page,
+  .practice-page,
+  .practice-standard {
     margin-top: 2vh;
   }
 }
