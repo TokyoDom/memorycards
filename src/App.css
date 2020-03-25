@@ -57,7 +57,6 @@ body {
   height: 100%;
   width: 100%;
   background-color: inherit;
-  cursor: pointer;
 }
 
 .front {
@@ -76,11 +75,15 @@ body {
   height: 75vh;
 }
 
-.creation-page {
+.creation-page, .practice-page, .practice-standard {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 10vh;
+}
+
+.practice-standard > * {
+  margin: 4px;
 }
 
 .multi-card-dnd {
@@ -105,5 +108,9 @@ body {
 @media screen and (max-width: 768px) {
   .multi-card-dnd {
     width: 100vw;
+  }
+
+  .creation-page, .practice-page, .practice-standard {
+    margin-top: 2vh;
   }
 }

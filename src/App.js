@@ -8,7 +8,7 @@ import "./App.css";
 import Home from "./Home";
 import Creation from "./Creation";
 import Practice from "./Practice";
-import Profile from './Profile';
+import Profile from "./Profile";
 import Login from "./Login";
 import Navbar from "./components/Navbar";
 import AppBar from "@material-ui/core/AppBar";
@@ -49,16 +49,20 @@ class App extends Component {
         //   userInfo: userInfo.data(),
         //   loading: false
         // });
-        firebase.firestore().collection("users").doc(user.uid).onSnapshot(doc => {
-          this.setState({
-            loggedIn: true,
-            signedOut: false,
-            userInfo: doc.data(),
-            loading: false
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(user.uid)
+          .onSnapshot(doc => {
+            this.setState({
+              loggedIn: true,
+              signedOut: false,
+              userInfo: doc.data(),
+              loading: false
+            });
           });
-        });
       } else {
-        if(this.state.userInfo !== "") {
+        if (this.state.userInfo !== "") {
           this.setState({
             signedOut: true,
             userInfo: ""
@@ -148,7 +152,7 @@ class App extends Component {
               </Switch>
             </div>
           ) : (
-            <AppBar position="sticky" style={{opacity: 0.75}}>
+            <AppBar position="sticky" style={{ opacity: 0.75 }}>
               <Toolbar></Toolbar>
             </AppBar>
           )}

@@ -7,7 +7,7 @@ import Backend from "react-dnd-multi-backend";
 import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch";
 import SingleCard from "./CreationViews/SingleCard";
 import MultiCard from "./CreationViews/MultiCard";
-import SignUpModal from './components/SignUpModal';
+import SignUpModal from "./components/SignUpModal";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import BorderAllIcon from "@material-ui/icons/BorderAll";
@@ -21,18 +21,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-// const testSet = [
-//   { front: "Card 1 Front", back: "Card 1 Back" },
-//   { front: "Card 2 Front", back: "Card 2 Back" },
-//   { front: "Card 3 Front", back: "Card 3 Back" },
-//   { front: "Card 4 Front", back: "Card 4 Back" },
-//   { front: "Card 5 Front", back: "Card 5 Back" },
-//   { front: "Card 6 Front", back: "Card 6 Back" },
-//   { front: "Card 7 Front", back: "Card 7 Back" },
-//   { front: "Card 8 Front", back: "Card 8 Back" },
-//   { front: "Card 9 Front", back: "Card 9 Back" },
-//   { front: "Card 10 Front", back: "Card 10 Back" }
-// ];
 
 class Creation extends Component {
   constructor(props) {
@@ -119,12 +107,12 @@ class Creation extends Component {
   };
 
   //for signUpModal click off
-  signUpModalClose = (close) => {
+  signUpModalClose = close => {
     this.setState({
       signUpModal: close,
-      setName: ''
+      setName: ""
     });
-  }
+  };
 
   //card set conditional
   renderCardSets = () => {
@@ -151,27 +139,28 @@ class Creation extends Component {
 
   //save new set to database (from modal)
   saveNewSet = async set => {
-    if(this.state.userInfo !== "") {
-    set = set.map(card => ({ front: card.front, back: card.back }));
-    try {
-      await this.db.collection("stacks").add({
-        name: this.state.setName,
-        uid: this.state.userInfo.uid,
-        set
-      });
-      this.setState({
-        cardSets: [
-          ...this.state.cardSets,
-          { name: this.state.setName, set, uid: this.state.userInfo.uid }
-        ]
-      });
-      alert("Set successfully added.");
-    } catch (err) {
-      console.log(err);
+    if (this.state.userInfo !== "") {
+      set = set.map(card => ({ front: card.front, back: card.back }));
+      try {
+        await this.db.collection("stacks").add({
+          name: this.state.setName,
+          uid: this.state.userInfo.uid,
+          date: firebase.firestore.Timestamp.fromDate(new Date()),
+          set
+        });
+        this.setState({
+          cardSets: [
+            ...this.state.cardSets,
+            { name: this.state.setName, set, uid: this.state.userInfo.uid }
+          ]
+        });
+        alert("Set successfully added.");
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      this.setState({ signUpModal: true });
     }
-  } else {
-    this.setState({signUpModal: true});
-  }
   };
 
   //save existing set to database
@@ -200,7 +189,10 @@ class Creation extends Component {
             .get();
           const fbSetName = setQuery.docs[0].id;
           const dataSet = this.db.collection("stacks").doc(fbSetName);
-          await dataSet.update({ set });
+          await dataSet.update({
+            set,
+            date: firebase.firestore.Timestamp.fromDate(new Date())
+          });
           this.setState({
             initialSet: set,
             cardSets: this.state.cardSets.map(el => {
@@ -283,75 +275,79 @@ class Creation extends Component {
   render() {
     return (
       <DndProvider backend={Backend} options={HTML5toTouch}>
-        {!this.state.loading ? <section className="creation-page">
-          <div className="creation-page-settings">
-            {this.renderCardSets()}
-            <ButtonGroup style={{ margin: 12 }}>
-              <Button
-                variant={this.state.singView ? "contained" : null}
-                color={this.state.singView ? "primary" : null}
-                onClick={e => this.setState({ singView: true })}
-              >
-                <CheckBoxOutlineBlankIcon />
-              </Button>
-              <Button
-                variant={this.state.singView ? null : "contained"}
-                color={this.state.singView ? null : "primary"}
-                onClick={e => this.setState({ singView: false })}
-              >
-                <BorderAllIcon />
-              </Button>
-            </ButtonGroup>
-          </div>
-          {this.renderView()}
-          {/* Modals */}
-          <SignUpModal 
-            isOpen={this.state.signUpModal} 
-            closeModal={this.signUpModalClose}
-            loggedIn={this.props.loggedIn}
-            set={this.state.set}
-            setName={this.state.setName}
-          />
-          <Dialog
-            open={this.state.saveModal}
-            onClose={() => this.setState({ saveModal: false, setName: "" })}
-          >
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Set Name"
-                type="text"
-                fullWidth
-                value={this.state.setName}
-                onChange={e => this.setState({ setName: e.target.value })}
-              ></TextField>
-              <DialogActions>
+        {!this.state.loading ? (
+          <section className="creation-page">
+            <div className="creation-page-settings">
+              {this.renderCardSets()}
+              <ButtonGroup style={{ margin: 12 }}>
                 <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={e => {
-                    if (this.state.setName !== "") {
-                      let alreadyExists = false;
-                      this.state.cardSets.forEach(set => {
-                        if (set.name === this.state.setName)
-                          alreadyExists = true;
-                      });
-                      if (!alreadyExists) {
-                        this.saveNewSet(this.state.set);
-                        this.setState({ saveModal: false });
-                      } else {
-                        console.log("name already exists");
-                      }
-                    }
-                  }}
+                  variant={this.state.singView ? "contained" : null}
+                  color={this.state.singView ? "primary" : null}
+                  onClick={e => this.setState({ singView: true })}
                 >
-                  Save
+                  <CheckBoxOutlineBlankIcon />
                 </Button>
-              </DialogActions>
-            </DialogContent>
-          </Dialog>
-        </section> : <CircularProgress className="spinner"/>}
+                <Button
+                  variant={this.state.singView ? null : "contained"}
+                  color={this.state.singView ? null : "primary"}
+                  onClick={e => this.setState({ singView: false })}
+                >
+                  <BorderAllIcon />
+                </Button>
+              </ButtonGroup>
+            </div>
+            {this.renderView()}
+            {/* Modals */}
+            <SignUpModal
+              isOpen={this.state.signUpModal}
+              closeModal={this.signUpModalClose}
+              loggedIn={this.props.loggedIn}
+              set={this.state.set}
+              setName={this.state.setName}
+            />
+            <Dialog
+              open={this.state.saveModal}
+              onClose={() => this.setState({ saveModal: false, setName: "" })}
+            >
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Set Name"
+                  type="text"
+                  fullWidth
+                  value={this.state.setName}
+                  onChange={e => this.setState({ setName: e.target.value })}
+                ></TextField>
+                <DialogActions>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={e => {
+                      if (this.state.setName !== "") {
+                        let alreadyExists = false;
+                        this.state.cardSets.forEach(set => {
+                          if (set.name === this.state.setName)
+                            alreadyExists = true;
+                        });
+                        if (!alreadyExists) {
+                          this.saveNewSet(this.state.set);
+                          this.setState({ saveModal: false });
+                        } else {
+                          console.log("name already exists");
+                        }
+                      }
+                    }}
+                  >
+                    Save
+                  </Button>
+                </DialogActions>
+              </DialogContent>
+            </Dialog>
+          </section>
+        ) : (
+          <CircularProgress className="spinner" />
+        )}
       </DndProvider>
     );
   }

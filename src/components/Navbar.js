@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import firebase from "../firebase/firebase";
 import "firebase/auth";
-import SignUpModal from './SignUpModal';
+import SignUpModal from "./SignUpModal";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -10,12 +11,15 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
+import CreateIcon from "@material-ui/icons/Create";
 import HomeIcon from "@material-ui/icons/Home";
+import FilterNoneIcon from "@material-ui/icons/FilterNone";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 function Navbar({ loggedIn, signedOut, userInfo }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [signUpModal, setSignUpModal] = useState(false);
+  const matches = useMediaQuery("(min-width:500px)");
 
   const handleUserClick = target => {
     setAnchorEl(target);
@@ -49,15 +53,27 @@ function Navbar({ loggedIn, signedOut, userInfo }) {
         >
           <HomeIcon />
         </IconButton>
-        <Button color="inherit" component={Link} to="/create">
-          Create
-        </Button>
+        {matches ? (
+          <Button color="inherit" component={Link} to="/create">
+            Create
+          </Button>
+        ) : (
+          <IconButton color="inherit" component={Link} to="/create">
+            <CreateIcon />
+          </IconButton>
+        )}
         {renderRedirect()}
         {loggedIn ? (
           <div>
-            <Button color="inherit" component={Link} to="/practice">
-              Practice
-            </Button>
+            {matches ? (
+              <Button color="inherit" component={Link} to="/practice">
+                Practice
+              </Button>
+            ) : (
+              <IconButton color="inherit" component={Link} to="/practice">
+                <FilterNoneIcon />
+              </IconButton>
+            )}
             <Button
               startIcon={<AccountCircleIcon />}
               color="inherit"
@@ -75,7 +91,11 @@ function Navbar({ loggedIn, signedOut, userInfo }) {
               open={Boolean(anchorEl)}
               onClose={e => setAnchorEl(null)}
             >
-              <MenuItem component={Link} to="/profile" onClick={e => setAnchorEl(null)}>
+              <MenuItem
+                component={Link}
+                to="/profile"
+                onClick={e => setAnchorEl(null)}
+              >
                 Profile
               </MenuItem>
               <MenuItem onClick={e => signOut()}>Logout</MenuItem>
@@ -87,7 +107,11 @@ function Navbar({ loggedIn, signedOut, userInfo }) {
             <Button component={Link} to="/login">
               Login
             </Button>
-            <SignUpModal isOpen={signUpModal} closeModal={setSignUpModal} loggedIn={loggedIn}/>
+            <SignUpModal
+              isOpen={signUpModal}
+              closeModal={setSignUpModal}
+              loggedIn={loggedIn}
+            />
           </ButtonGroup>
         )}
       </Toolbar>

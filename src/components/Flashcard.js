@@ -6,8 +6,8 @@ import CardActions from "@material-ui/core/CardActions";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import FlipToFrontIcon from '@material-ui/icons/FlipToFront';
-import FlipToBackIcon from '@material-ui/icons/FlipToBack';
+import FlipToFrontIcon from "@material-ui/icons/FlipToFront";
+import FlipToBackIcon from "@material-ui/icons/FlipToBack";
 import ArrowLeftIcon from "@material-ui/icons/ArrowLeft";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 
@@ -95,11 +95,15 @@ function Flashcard(props) {
       <IconButton
         size="small"
         className={classes.flip}
-        onClick={e => setFlip(!flip)}
+        onClick={e => (props.noFlip ? null : setFlip(!flip))}
       >
         {flip ? <FlipToBackIcon /> : <FlipToFrontIcon />}
       </IconButton>
-      <CardContent className={classes.text} onClick={e => setFlip(!flip)}>
+      <CardContent
+        style={props.flipCardStyles}
+        className={classes.text}
+        onClick={e => (props.noFlip ? null : setFlip(!flip))}
+      >
         <Typography
           id="index"
           className={classes.index}
@@ -118,6 +122,7 @@ function Flashcard(props) {
       </CardContent>
       <CardActions className={classes.arrows} style={props.arrowStyles}>
         <Button
+          className="go-left"
           onClick={e => {
             if (index > 0) {
               setFlip(false);
@@ -128,10 +133,17 @@ function Flashcard(props) {
           <ArrowLeftIcon />
         </Button>
         <Button
+          className="go-right"
           onClick={e => {
             if (index < flashCards.length - 1) {
               setFlip(false);
+              if(props.nextQuestion) props.nextQuestion();
               setTimeout(() => setIndex(index + 1), 125);
+            }
+            if (index === flashCards.length - 1) {
+              setFlip(false);
+              if(props.nextQuestion) props.nextQuestion();
+              setTimeout(() => setIndex(0), 125);
             }
           }}
         >
