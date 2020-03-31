@@ -42,8 +42,19 @@ class Creation extends Component {
   }
 
   async componentDidMount() {
-    //get data from firestore
     this.setState({ loading: true });
+
+    //check for default set
+    if(this.props.location.state) {
+      const { set } = this.props.location.state;
+      this.updateSet(set.set);
+      this.setState({
+        setName: set.name,
+        initialSet: set.set.map((card, i) => ({ ...card, id: i }))
+      });
+    }
+
+    //get data from firestore
     if (this.props.loggedIn) {
       const cardSets = await this.db
         .collection("stacks")

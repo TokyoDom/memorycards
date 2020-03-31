@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import _ from "lodash";
 import Flashcard from "../components/Flashcard";
 import FormControl from "@material-ui/core/FormControl";
@@ -18,6 +19,16 @@ function Typing({ cardSets, userInfo }) {
   const [answer, setAnswer] = useState("");
   const [isShuffled, setShuffle] = useState(true);
   const [shufSet, changeShufSet] = useState([]);
+
+  const location = useLocation();
+  useEffect(() => {
+    if(location.state) {
+      const set = location.state.set.set;
+      changeSet(set);
+      changeShufSet(_.shuffle(set));
+      changeSetName(location.state.set.name);
+    }
+  }, [location.state]);
 
   const checkAnswer = () => {
     if (setName !== "" && answer !== "") {

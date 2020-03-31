@@ -38,17 +38,6 @@ class App extends Component {
     this.unsub = firebase.auth().onAuthStateChanged(async user => {
       this.setState({ loading: true });
       if (user) {
-        // const userInfo = await firebase
-        //   .firestore()
-        //   .collection("users")
-        //   .doc(user.uid)
-        //   .get();
-        // this.setState({
-        //   loggedIn: true,
-        //   signedOut: false,
-        //   userInfo: userInfo.data(),
-        //   loading: false
-        // });
         firebase
           .firestore()
           .collection("users")
@@ -58,6 +47,7 @@ class App extends Component {
               loggedIn: true,
               signedOut: false,
               userInfo: doc.data(),
+              email: user.email,
               loading: false
             });
           });
@@ -131,6 +121,7 @@ class App extends Component {
                   render={props => (
                     <Profile
                       {...props}
+                      email={this.state.email}
                       loggedIn={this.state.loggedIn}
                       userInfo={this.state.userInfo}
                       key={window.location.pathname}

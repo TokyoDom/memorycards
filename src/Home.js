@@ -21,6 +21,7 @@ class Home extends Component {
           <div>
             <LoggedIn
               userInfo={this.props.userInfo}
+              cardSets={this.props.cardSets}
             />
           </div>
         ) : (

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import _ from 'lodash';
-import firebase from './firebase/firebase';
-import 'firebase/firestore';
+import _ from "lodash";
+import { Redirect } from "react-router-dom";
+import firebase from "./firebase/firebase";
+import "firebase/firestore";
+import "firebase/auth";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
@@ -27,7 +29,7 @@ const colors = ["fff", "#ffe08a", "#dfffc7", "#c7ffff", "#ddcfff", "#ffd4fa"];
 class Profile extends Component {
   constructor(props) {
     super(props);
-    const {name, styles, uid} = _.cloneDeep(props.userInfo);
+    const { name, styles, uid } = _.cloneDeep(props.userInfo);
     this.state = {
       unsaved: false,
       name,
@@ -37,20 +39,34 @@ class Profile extends Component {
   }
 
   saveChanges = async () => {
-    if(this.state.unsaved) {
+    if (this.state.unsaved) {
       try {
-        const userInfo = firebase.firestore().collection('users').doc(this.state.uid);
-        await userInfo.set({
-          name: this.state.name,
-          styles: this.state.styles,
-          uid: this.state.uid
-        }, { merge: true });
-        this.setState({unsaved: false});
+        const userInfo = firebase
+          .firestore()
+          .collection("users")
+          .doc(this.state.uid);
+        await userInfo.set(
+          {
+            name: this.state.name,
+            styles: this.state.styles,
+            uid: this.state.uid
+          },
+          { merge: true }
+        );
+        this.setState({ unsaved: false });
       } catch (err) {
         console.log(err);
       }
     } else {
-      console.log('no unsaved changes');
+      console.log("no unsaved changes");
+    }
+  };
+
+  resetPass = async () => {
+    try {
+      await firebase.auth().sendPasswordResetEmail(this.props.email);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -61,7 +77,7 @@ class Profile extends Component {
   };
 
   renderColors = () => {
-    if (this.state.styles) { 
+    if (this.state.styles) {
       const activeColor = this.state.styles.backgroundColor;
       return colors.map(color => (
         <Paper
@@ -79,19 +95,30 @@ class Profile extends Component {
     }
   };
 
+  renderRedirect = () => {
+    if (!this.props.loggedIn) {
+      return <Redirect to="/" />;
+    } else {
+      return null;
+    }
+  };
+
   render() {
     return (
       <section className="profile-page">
+        {this.renderRedirect()}
         <div className="color-picker" style={styles.colorRoot}>
           {this.renderColors()}
         </div>
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           color="primary"
           disabled={this.state.unsaved ? false : true}
-          onClick={e => this.saveChanges()}>
+          onClick={e => this.saveChanges()}
+        >
           Save Changes
         </Button>
+        <Button onClick={e => this.resetPass()}>Reset Password</Button>
       </section>
     );
   }

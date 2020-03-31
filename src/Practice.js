@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import firebase from "./firebase/firebase";
 import "firebase/firestore";
 import PracticeHome from "./PracticePages/PracticeHome";
@@ -21,8 +21,9 @@ class Practice extends Component {
   }
 
   async componentDidMount() {
-    //get data from firestore
     this.setState({ loading: true });
+
+    //get data from firestore
     if (this.props.userInfo) {
       const cardSets = await this.db
         .collection("stacks")
@@ -35,9 +36,18 @@ class Practice extends Component {
     }
   }
 
+  renderRedirect = () => {
+    if (!this.props.loggedIn) {
+      return <Redirect to="/" />;
+    } else {
+      return null;
+    }
+  };
+
   render() {
     return (
       <section className="practice-routes">
+        {this.renderRedirect()}
         {!this.state.loading ? (
           <Switch>
             <Route
