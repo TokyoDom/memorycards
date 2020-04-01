@@ -93,10 +93,10 @@ function Navbar({ loggedIn, signedOut, userInfo }) {
             >
               <MenuItem
                 component={Link}
-                to="/profile"
+                to="/settings"
                 onClick={e => setAnchorEl(null)}
               >
-                Profile
+                Settings
               </MenuItem>
               <MenuItem onClick={e => signOut()}>Logout</MenuItem>
             </Menu>

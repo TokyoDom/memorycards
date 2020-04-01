@@ -4,17 +4,26 @@ import { Redirect } from "react-router-dom";
 import firebase from "./firebase/firebase";
 import "firebase/firestore";
 import "firebase/auth";
+import ResetPassModal from "./components/ResetPassModal";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import TextField from "@material-ui/core/TextField";
 
 const styles = {
+  profile: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, minmax(150px, 1fr))",
+    gridRowGap: 16
+  },
   colorRoot: {
     display: "flex",
     flexWrap: "wrap",
-    padding: 8,
-    backgroundColor: "#fff",
-    width: 200,
-    borderRadius: 5
+    width: 192,
+    borderRadius: 5,
+    border: "1px solid black",
+    padding: 8
   },
   color: {
     width: 50,
@@ -24,7 +33,7 @@ const styles = {
   }
 };
 
-const colors = ["fff", "#ffe08a", "#dfffc7", "#c7ffff", "#ddcfff", "#ffd4fa"];
+const colors = ["#fff", "#ffe08a", "#dfffc7", "#c7ffff", "#ddcfff", "#555555"];
 
 class Profile extends Component {
   constructor(props) {
@@ -32,6 +41,7 @@ class Profile extends Component {
     const { name, styles, uid } = _.cloneDeep(props.userInfo);
     this.state = {
       unsaved: false,
+      resetModal: false,
       name,
       styles,
       uid
@@ -62,17 +72,14 @@ class Profile extends Component {
     }
   };
 
-  resetPass = async () => {
-    try {
-      await firebase.auth().sendPasswordResetEmail(this.props.email);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   setColor = e => {
     let styles = this.state.styles;
     styles.backgroundColor = e.target.id;
+    if (e.target.id === "#555555") {
+      styles.color = "#fff";
+    } else {
+      styles.color = "#000000";
+    }
     this.setState({ unsaved: true, styles });
   };
 
@@ -107,9 +114,33 @@ class Profile extends Component {
     return (
       <section className="profile-page">
         {this.renderRedirect()}
-        <div className="color-picker" style={styles.colorRoot}>
-          {this.renderColors()}
-        </div>
+        <Card>
+          <CardContent style={styles.profile}>
+            <p>Username</p>
+            <TextField
+              type="text"
+              variant="outlined"
+              margin="dense"
+              value={this.state.name}
+              onChange={e =>
+                this.setState({ name: e.target.value, unsaved: true })
+              }
+            />
+            <p>Flashcard Color</p>
+            <div className="color-picker" style={styles.colorRoot}>
+              {this.renderColors()}
+            </div>
+            <p>Password</p>
+            <Button
+              style={{ width: 100 }}
+              variant="outlined"
+              color="secondary"
+              onClick={e => this.setState({ resetModal: true })}
+            >
+              Reset
+            </Button>
+          </CardContent>
+        </Card>
         <Button
           variant="contained"
           color="primary"
@@ -118,7 +149,10 @@ class Profile extends Component {
         >
           Save Changes
         </Button>
-        <Button onClick={e => this.resetPass()}>Reset Password</Button>
+        <ResetPassModal
+          isOpen={this.state.resetModal}
+          closeModal={close => this.setState({ resetModal: false })}
+        />
       </section>
     );
   }

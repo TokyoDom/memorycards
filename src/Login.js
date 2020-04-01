@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import firebase from "./firebase/firebase";
 import "firebase/auth";
 import SignUpModal from "./components/SignUpModal";
+import ResetPassModal from "./components/ResetPassModal";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
@@ -31,13 +32,11 @@ class Login extends Component {
     this.setState({ pass: value });
   };
 
-  handleClick = async () => {
-    this.setState({ loading: true });
+  handleLogin = async () => {
     try {
       await firebase
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.pass);
-      this.setState({ loading: false });
     } catch (err) {
       console.log(err);
       this.setState({
@@ -49,12 +48,12 @@ class Login extends Component {
 
   handleEnter = code => {
     if (code === 13) {
-      this.handleClick();
+      this.handleLogin();
     }
   };
 
   renderRedirect = () => {
-    if (this.props.loggedIn) {
+    if (this.props.loggedIn === true) {
       return <Redirect to="/" />;
     } else {
       return null;
@@ -94,7 +93,7 @@ class Login extends Component {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={e => this.handleClick()}
+                    onClick={e => this.handleLogin()}
                   >
                     Login
                   </Button>
@@ -106,15 +105,29 @@ class Login extends Component {
               <Button
                 variant="text"
                 color="primary"
-                onClick={e => this.setState({signUpModal: true})}
+                onClick={e => this.setState({ signUpModal: true })}
               >
                 Sign Up
+              </Button>
+            </div>
+            <div>
+              Forgot password?
+              <Button
+                variant="text"
+                color="primary"
+                onClick={e => this.setState({ resetModal: true })}
+              >
+                Reset
               </Button>
             </div>
             <SignUpModal
               isOpen={this.state.signUpModal}
               closeModal={close => this.setState({ signUpModal: close })}
               loggedIn={this.props.loggedIn}
+            />
+            <ResetPassModal
+              isOpen={this.state.resetModal}
+              closeModal={close => this.setState({ resetModal: false })}
             />
           </div>
         )}

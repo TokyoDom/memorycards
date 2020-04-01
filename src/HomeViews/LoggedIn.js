@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import firebase from "../firebase/firebase";
 import "firebase/firestore";
 import Flashcard from "../components/Flashcard";
 import quotes from "./quotes/quotes";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class LoggedIn extends Component {
   constructor(props) {
@@ -63,25 +64,49 @@ class LoggedIn extends Component {
   render() {
     return (
       <div>
-        {this.showQuote()}
-        <div className="loggedIn-sets" style={{ marginTop: "5vh" }}>
-          <h4>Recent Sets</h4>
-          {this.state.cardSets.map((set, i) => (
-            <div style={{ display: "flex", flexDirection: "column" }} key={i}>
-              <Flashcard
-                set={set.set}
-                setName={set.name}
-                cardStyles={this.state.userInfo.styles}
-              />
-              <ButtonGroup style={{ margin: "auto" }}>
-                <Button component={Link} to={{pathname: "/create", state: {set}}}>Edit</Button>
-                <Button component={Link} to={{pathname: "/practice/typing", state: {set}}}>Practice</Button>
-                <Button component={Link} to={{pathname: "/practice/quiz", state: {set}}}>Quiz</Button>
-              </ButtonGroup>
-              <hr />
+        {this.state.loading ? (
+          <CircularProgress className="spinner" />
+        ) : (
+          <div>
+            {this.showQuote()}
+            <div className="loggedIn-sets" style={{ marginTop: "5vh" }}>
+              <h4>Recent Sets</h4>
+              {this.state.cardSets.map((set, i) => (
+                <div
+                  style={{ display: "flex", flexDirection: "column" }}
+                  key={i}
+                >
+                  <Flashcard
+                    set={set.set}
+                    setName={set.name}
+                    cardStyles={this.state.userInfo.styles}
+                  />
+                  <ButtonGroup style={{ margin: "auto" }}>
+                    <Button
+                      component={Link}
+                      to={{ pathname: "/create", state: { set } }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      component={Link}
+                      to={{ pathname: "/practice/typing", state: { set } }}
+                    >
+                      Practice
+                    </Button>
+                    <Button
+                      component={Link}
+                      to={{ pathname: "/practice/quiz", state: { set } }}
+                    >
+                      Quiz
+                    </Button>
+                  </ButtonGroup>
+                  <hr />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     );
   }

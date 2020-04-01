@@ -3,7 +3,7 @@ import firebase from "./firebase/firebase";
 import "firebase/auth";
 import "firebase/firestore";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 import Home from "./Home";
 import Creation from "./Creation";
@@ -28,7 +28,7 @@ const theme = createMuiTheme({
 class App extends Component {
   state = {
     loading: false,
-    loggedIn: false,
+    loggedIn: "pending",
     userInfo: "",
     verified: false //keep?
   };
@@ -117,11 +117,10 @@ class App extends Component {
                   )}
                 />
                 <Route
-                  path="/profile"
+                  path="/settings"
                   render={props => (
                     <Profile
                       {...props}
-                      email={this.state.email}
                       loggedIn={this.state.loggedIn}
                       userInfo={this.state.userInfo}
                       key={window.location.pathname}
@@ -140,6 +139,9 @@ class App extends Component {
                     />
                   )}
                 />
+                <Route path="/">
+                  <Redirect to="/"/>
+                </Route>
               </Switch>
             </div>
           ) : (

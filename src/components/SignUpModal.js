@@ -9,18 +9,21 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
 function SignUpModal({ set, setName, isOpen, closeModal, loggedIn }) {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passConfirm, setPassConfirm] = useState("");
+  const [error, setError] = useState("");
 
   const resetText = () => {
     setUserName("");
     setEmail("");
     setPassword("");
     setPassConfirm("");
+    setError("");
   };
 
   const signUpUser = async () => {
@@ -45,7 +48,7 @@ function SignUpModal({ set, setName, isOpen, closeModal, loggedIn }) {
           });
         }
       } catch (err) {
-        console.log(err.message);
+        setError(err.message);
       }
     }
   };
@@ -105,6 +108,7 @@ function SignUpModal({ set, setName, isOpen, closeModal, loggedIn }) {
           value={passConfirm}
           onChange={e => setPassConfirm(e.target.value)}
         />
+        <Typography>{error}</Typography>
       </DialogContent>
       <DialogActions>
         <Button
