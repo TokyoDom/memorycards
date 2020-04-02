@@ -137,7 +137,11 @@ function MultiCard({
           <Button variant="contained" onClick={e => handleAdd()}>
             <AddIcon /> New Card
           </Button>
-          <Button variant="contained" color="primary" onClick={e => saveSet(cards)}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={e => saveSet(cards)}
+          >
             <SaveAltIcon /> Save Set
           </Button>
           <Button variant="contained" color="secondary" onClick={e => delSet()}>

@@ -24,7 +24,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Minicard({ id, card, moveCard, findCard, handleEdit, handleDelCard, cardStyles }) {
+function Minicard({
+  id,
+  card,
+  moveCard,
+  findCard,
+  handleEdit,
+  handleDelCard,
+  cardStyles
+}) {
   const classes = useStyles();
   const originalIndex = findCard(id).index;
 
@@ -57,7 +65,7 @@ function Minicard({ id, card, moveCard, findCard, handleEdit, handleDelCard, car
     <div ref={node => drag(drop(node))} style={{ opacity: isDragging ? 0 : 1 }}>
       <Flashcard
         set={[card]}
-        cardStyles={{...cardStyles, width: "150px", height: "150px" }}
+        cardStyles={{ ...cardStyles, width: "150px", height: "150px" }}
         indexStyles={{ display: "none" }}
         arrowStyles={{ display: "none" }}
       />

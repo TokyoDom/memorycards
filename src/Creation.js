@@ -21,7 +21,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-
 class Creation extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +44,7 @@ class Creation extends Component {
     this.setState({ loading: true });
 
     //check for default set
-    if(this.props.location.state) {
+    if (this.props.location.state) {
       const { set } = this.props.location.state;
       this.updateSet(set.set);
       this.setState({

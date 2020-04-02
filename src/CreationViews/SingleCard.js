@@ -119,7 +119,7 @@ function SingleCard({
           </Button>
         </ButtonGroup>
       </div>
-      <Flashcard set={set} setName={setName} cardStyles={cardStyles}/>
+      <Flashcard set={set} setName={setName} cardStyles={cardStyles} />
       {/* Add Modal */}
       <CreationModal
         isOpen={addModal}

@@ -6,7 +6,6 @@ import CreateIcon from "@material-ui/icons/Create";
 import Flashcard from "../components/Flashcard";
 
 class LoggedOut extends Component {
-
   state = {
     set: [
       {
@@ -15,15 +14,13 @@ class LoggedOut extends Component {
         set to start or login if you already have an account!`
       }
     ]
-  }
+  };
 
   render() {
     return (
       <section className="home-logged-out">
         <h3>Welcome to Memory Cards</h3>
-        <Flashcard
-          set={this.state.set}
-        />
+        <Flashcard set={this.state.set} />
         <ButtonGroup style={{ marginTop: 6 }}>
           <Button
             component={Link}
@@ -34,7 +31,12 @@ class LoggedOut extends Component {
             <CreateIcon />
             Create Set
           </Button>
-          <Button component={Link} to="/login" variant="contained" color="secondary">
+          <Button
+            component={Link}
+            to="/login"
+            variant="contained"
+            color="secondary"
+          >
             Login
           </Button>
         </ButtonGroup>

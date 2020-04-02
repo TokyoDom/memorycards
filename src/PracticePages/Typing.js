@@ -22,7 +22,7 @@ function Typing({ cardSets, userInfo }) {
 
   const location = useLocation();
   useEffect(() => {
-    if(location.state) {
+    if (location.state) {
       const set = location.state.set.set;
       changeSet(set);
       changeShufSet(_.shuffle(set));

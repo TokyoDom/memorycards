@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import _ from "lodash";
 import Flashcard from "../components/Flashcard";
 import FormControl from "@material-ui/core/FormControl";
@@ -28,13 +28,13 @@ function Quiz({ cardSets, userInfo }) {
 
   const location = useLocation();
   useEffect(() => {
-    if(location.state) {
+    if (location.state) {
       const set = location.state.set.set;
       changeSet(set);
       changeShufSet(_.shuffle(set));
       changeSetName(location.state.set.name);
     }
-  }, [location.state])
+  }, [location.state]);
 
   const saveAnswer = () => {
     if (setName !== "" && answer !== "") {
@@ -137,20 +137,22 @@ function Quiz({ cardSets, userInfo }) {
         <div className="practice-quiz">
           <div style={{ display: "flex", alignItems: "flex-end" }}>
             {renderCardSets()}
-            {report.length <= 0 ? <FormControlLabel
-              control={
-                <Switch
-                  checked={isShuffled}
-                  onChange={e => {
-                    changeShufSet(_.shuffle(set));
-                    setShuffle(!isShuffled);
-                  }}
-                  color="primary"
-                />
-              }
-              label="Shuffle"
-              style={{ margin: 0 }}
-            /> : null}
+            {report.length <= 0 ? (
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isShuffled}
+                    onChange={e => {
+                      changeShufSet(_.shuffle(set));
+                      setShuffle(!isShuffled);
+                    }}
+                    color="primary"
+                  />
+                }
+                label="Shuffle"
+                style={{ margin: 0 }}
+              />
+            ) : null}
           </div>
           <Flashcard
             set={isShuffled ? shufSet : set}
@@ -160,7 +162,7 @@ function Quiz({ cardSets, userInfo }) {
               cursor: "default"
             }}
             noFlip={true}
-            arrowStyles={{display: 'none'}}
+            arrowStyles={{ display: "none" }}
           />
           <Paper style={{ padding: 4 }}>
             <TextField

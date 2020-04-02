@@ -19,11 +19,7 @@ const styles = {
   },
   colorRoot: {
     display: "flex",
-    flexWrap: "wrap",
-    width: 192,
-    borderRadius: 5,
-    border: "1px solid black",
-    padding: 8
+    flexWrap: "wrap"
   },
   color: {
     width: 50,

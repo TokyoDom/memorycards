@@ -126,12 +126,12 @@ function Flashcard(props) {
           onClick={e => {
             if (index > 0) {
               setFlip(false);
-              if(props.nextQuestion) props.nextQuestion();
+              if (props.nextQuestion) props.nextQuestion();
               setTimeout(() => setIndex(index - 1), 125);
             }
-            if(index === 0) {
+            if (index === 0) {
               setFlip(false);
-              if(props.nextQuestion) props.nextQuestion();
+              if (props.nextQuestion) props.nextQuestion();
               setTimeout(() => setIndex(flashCards.length - 1), 125);
             }
           }}
@@ -143,12 +143,12 @@ function Flashcard(props) {
           onClick={e => {
             if (index < flashCards.length - 1) {
               setFlip(false);
-              if(props.nextQuestion) props.nextQuestion();
+              if (props.nextQuestion) props.nextQuestion();
               setTimeout(() => setIndex(index + 1), 125);
             }
             if (index === flashCards.length - 1) {
               setFlip(false);
-              if(props.nextQuestion) props.nextQuestion();
+              if (props.nextQuestion) props.nextQuestion();
               setTimeout(() => setIndex(0), 125);
             }
           }}

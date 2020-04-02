@@ -140,7 +140,7 @@ class App extends Component {
                   )}
                 />
                 <Route path="/">
-                  <Redirect to="/"/>
+                  <Redirect to="/" />
                 </Route>
               </Switch>
             </div>

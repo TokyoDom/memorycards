@@ -41,11 +41,14 @@ function SignUpModal({ set, setName, isOpen, closeModal, loggedIn }) {
             uid: userCredentials.user.uid
           });
         if (set) {
-          await firebase.firestore().collection("stacks").add({
-            name: setName,
-            uid: userCredentials.user.uid,
-            set
-          });
+          await firebase
+            .firestore()
+            .collection("stacks")
+            .add({
+              name: setName,
+              uid: userCredentials.user.uid,
+              set
+            });
         }
       } catch (err) {
         setError(err.message);
