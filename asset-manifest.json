@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/memorycards/static/css/main.4760a65c.chunk.css",
+    "main.js": "/memorycards/static/js/main.4442a52f.chunk.js",
+    "main.js.map": "/memorycards/static/js/main.4442a52f.chunk.js.map",
+    "runtime-main.js": "/memorycards/static/js/runtime-main.4faefcf1.js",
+    "runtime-main.js.map": "/memorycards/static/js/runtime-main.4faefcf1.js.map",
+    "static/js/2.4b32d394.chunk.js": "/memorycards/static/js/2.4b32d394.chunk.js",
+    "static/js/2.4b32d394.chunk.js.map": "/memorycards/static/js/2.4b32d394.chunk.js.map",
+    "index.html": "/memorycards/index.html",
+    "precache-manifest.4b087d691af1a926108ec9456add011f.js": "/memorycards/precache-manifest.4b087d691af1a926108ec9456add011f.js",
+    "service-worker.js": "/memorycards/service-worker.js",
+    "static/css/main.4760a65c.chunk.css.map": "/memorycards/static/css/main.4760a65c.chunk.css.map",
+    "static/js/2.4b32d394.chunk.js.LICENSE.txt": "/memorycards/static/js/2.4b32d394.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4faefcf1.js",
+    "static/js/2.4b32d394.chunk.js",
+    "static/css/main.4760a65c.chunk.css",
+    "static/js/main.4442a52f.chunk.js"
+  ]
+}
