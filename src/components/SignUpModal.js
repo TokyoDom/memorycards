@@ -38,7 +38,11 @@ function SignUpModal({ set, setName, isOpen, closeModal, loggedIn }) {
           .doc(userCredentials.user.uid)
           .set({
             name: userName,
-            uid: userCredentials.user.uid
+            uid: userCredentials.user.uid,
+            styles: {
+              backgroundColor: "#fff",
+              color: "#000000"
+            }
           });
         if (set) {
           await firebase

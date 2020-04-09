@@ -3,7 +3,7 @@ import firebase from "./firebase/firebase";
 import "firebase/auth";
 import "firebase/firestore";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, HashRouter } from "react-router-dom";
 import "./App.css";
 import Home from "./Home";
 import Creation from "./Creation";
@@ -72,7 +72,7 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <HashRouter basename="/">
         <ThemeProvider theme={theme}>
           {!this.state.loading ? (
             <div className="App">
@@ -150,7 +150,7 @@ class App extends Component {
             </AppBar>
           )}
         </ThemeProvider>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }

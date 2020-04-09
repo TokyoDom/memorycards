@@ -71,6 +71,7 @@ class LoggedIn extends Component {
             {this.showQuote()}
             <div className="loggedIn-sets" style={{ marginTop: "5vh" }}>
               <h4>Recent Sets</h4>
+              {this.state.cardSets.length === 0 ? <h2>You have no sets! Click <Link to="/create">create</Link> to get started.</h2> : null}
               {this.state.cardSets.map((set, i) => (
                 <div
                   style={{ display: "flex", flexDirection: "column" }}

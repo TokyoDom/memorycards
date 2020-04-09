@@ -41,6 +41,7 @@ class Login extends Component {
       console.log(err);
       this.setState({
         error: err.message,
+        pass: "",
         loading: false
       });
     }
@@ -77,6 +78,7 @@ class Login extends Component {
                     label="E-Mail"
                     variant="outlined"
                     fullWidth
+                    value={this.state.email}
                     onChange={e => this.handleEmail(e.target.value)}
                   />
                   <TextField
@@ -85,6 +87,7 @@ class Login extends Component {
                     label="Password"
                     variant="outlined"
                     fullWidth
+                    value={this.state.pass}
                     onChange={e => this.handlePass(e.target.value)}
                   />
                   <Typography variant="caption">{this.state.error}</Typography>
@@ -127,7 +130,7 @@ class Login extends Component {
             />
             <ResetPassModal
               isOpen={this.state.resetModal}
-              closeModal={close => this.setState({ resetModal: false })}
+              closeModal={close => this.setState({ resetModal: close })}
             />
           </div>
         )}
