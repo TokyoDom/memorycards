@@ -38,7 +38,6 @@ class Login extends Component {
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.pass);
     } catch (err) {
-      console.log(err);
       this.setState({
         error: err.message,
         pass: "",

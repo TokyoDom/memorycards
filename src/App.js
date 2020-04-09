@@ -29,8 +29,7 @@ class App extends Component {
   state = {
     loading: false,
     loggedIn: "pending",
-    userInfo: "",
-    verified: false //keep?
+    userInfo: ""
   };
 
   componentDidMount() {

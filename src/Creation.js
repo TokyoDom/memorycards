@@ -54,7 +54,7 @@ class Creation extends Component {
     }
 
     //get data from firestore
-    if (this.props.loggedIn) {
+    if (this.props.userInfo) {
       const cardSets = await this.db
         .collection("stacks")
         .where("uid", "==", this.state.userInfo.uid)
@@ -166,7 +166,7 @@ class Creation extends Component {
         });
         alert("Set successfully added.");
       } catch (err) {
-        console.log(err);
+        alert(err.message);
       }
     } else {
       this.setState({ signUpModal: true });
@@ -214,7 +214,7 @@ class Creation extends Component {
           });
           alert("Set successfully updated.");
         } catch (err) {
-          console.log(err);
+          alert(err.message);
         }
       } else {
         this.setState({ saveModal: true });
@@ -246,7 +246,7 @@ class Creation extends Component {
         });
         alert("Set successfully deleted.");
       } catch (err) {
-        console.log(err);
+        alert(err.message);
       }
     }
   };
@@ -344,7 +344,7 @@ class Creation extends Component {
                           this.saveNewSet(this.state.set);
                           this.setState({ saveModal: false });
                         } else {
-                          console.log("name already exists");
+                          alert("A set with that name already exists.");
                         }
                       }
                     }}

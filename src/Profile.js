@@ -61,10 +61,8 @@ class Profile extends Component {
         );
         this.setState({ unsaved: false });
       } catch (err) {
-        console.log(err);
+        alert(err.message);
       }
-    } else {
-      console.log("no unsaved changes");
     }
   };
 

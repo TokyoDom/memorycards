@@ -37,12 +37,9 @@ function Typing({ cardSets, userInfo }) {
       const userAnswer = answer.replace(/\s+/g, "").toLowerCase();
 
       if (rightAnswer === userAnswer) {
-        console.log("right answer");
         document.querySelector(".go-right").click();
       } else {
         setCount(ansCount + 1);
-        console.log("wrong answer");
-        console.log([userAnswer, rightAnswer]);
       }
     }
   };

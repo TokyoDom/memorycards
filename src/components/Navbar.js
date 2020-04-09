@@ -29,7 +29,7 @@ function Navbar({ loggedIn, signedOut, userInfo }) {
     try {
       await firebase.auth().signOut();
     } catch (err) {
-      console.log(err);
+      alert(err.message);
     }
   };
 
